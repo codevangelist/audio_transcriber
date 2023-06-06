@@ -59,20 +59,22 @@ export default function Home() {
       </div>
 
       <div>
-          <input
-            type="file"
-            accept="audio/*"
-          />
-      </div>
+        <div>
+            <input
+              type="file"
+              accept="audio/*"
+            />
+        </div>
 
-      <div>
-        <button onClick={sendAudio} >
-          Send Audio
-        </button>
-      </div>
+        <div>
+          <button onClick={sendAudio} >
+            Send Audio
+          </button>
+        </div>
 
-      <div>
-        <TextWriter text={convertedText} delay={10} />
+        <div>
+          <TextWriter text={convertedText} delay={10} />
+        </div>
       </div>
     </main>
   )
