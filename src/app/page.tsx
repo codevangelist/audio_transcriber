@@ -39,7 +39,23 @@ export default function Home() {
 
     setConvertedText(data.text);
 
-};
+  };
+
+  const [transcriptionText, setTranscriptionText] = useState('');
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Handle file upload here (e.g., using FileReader)
+    }
+  };
+
+  const handleLinkInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const link = event.target.value;
+    if (link) {
+      // Handle link input here
+    }
+  };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -59,13 +75,40 @@ export default function Home() {
         </div>
       </div>
 
-      <div className=''>
-        <div>
-            <input
-              type="file"
-              accept="audio/*"
-            />
+      <div className="max-w-3xl mx-auto py-8">
+        <h1 className="text-2xl font-bold mb-4">Audio Transcription</h1>
+
+        <div className="mb-4">
+          <label htmlFor="fileInput" className="block font-medium">
+            Upload Audio File
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            accept="audio/*"
+            onChange={handleFileInputChange}
+            className="py-2 px-4 mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="linkInput" className="block font-medium">
+            Add Link to Audio File
+          </label>
+          <input
+            id="linkInput"
+            type="text"
+            onChange={handleLinkInputChange}
+            className="py-2 px-4 mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+
+        <button
+          className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+          // Add onClick handler for transcription start
+        >
+          Start Transcription
+        </button>
 
         <div>
           <button onClick={sendAudio} >
@@ -75,6 +118,11 @@ export default function Home() {
 
         <div>
           <TextWriter text={convertedText} delay={10} />
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-lg font-bold mb-4">Transcribed Text</h2>
+          <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
         </div>
       </div>
     </main>
