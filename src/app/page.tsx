@@ -127,7 +127,7 @@ export default function Home() {
 
         <div>
         <button
-          className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+          className="py-2 px-4 mx-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
         >
           Copy All
