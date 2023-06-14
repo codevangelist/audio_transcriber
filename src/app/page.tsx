@@ -124,6 +124,21 @@ export default function Home() {
           <h2 className="text-lg font-bold mb-4">Transcribed Text</h2>
           <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
         </div>
+
+        <div>
+        <button
+          className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+          // Add onClick handler for transcription start
+        >
+          Copy All
+        </button>
+        <button
+          className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+          // Add onClick handler for transcription start
+        >
+          Share Text
+        </button>
+        </div>
       </div>
     </main>
   )
