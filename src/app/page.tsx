@@ -125,7 +125,7 @@ export default function Home() {
           <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
         </div>
 
-        <div>
+        <div className='mt-4'>
         <button
           className="py-2 px-4 mx-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
