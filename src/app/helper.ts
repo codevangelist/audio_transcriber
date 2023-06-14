@@ -1,5 +1,5 @@
 class AudioTranscript {
-    async transcribe(audioFile: any) {
+    async assembly_ai_transcribe(audioFile: any) {
       const uploadUrl = 'https://api.assemblyai.com/v2/transcript';
       const uploadParams = {
         headers: {
@@ -49,6 +49,14 @@ class AudioTranscript {
       } catch (error) {
         console.error(`Error: ${error}`);
       }
+    }
+
+    async whisper_ai_transcribe(audioFile: any) {
+      
+    }
+
+    async deepgram_transcribe(audioFile: any) {
+      
     }
 }
 

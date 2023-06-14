@@ -111,12 +111,6 @@ export default function Home() {
         </button>
 
         <div>
-          <button onClick={sendAudio} >
-            Send Audio
-          </button>
-        </div>
-
-        <div>
           <TextWriter text={convertedText} delay={10} />
         </div>
 
