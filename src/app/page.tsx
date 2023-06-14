@@ -1,6 +1,8 @@
 "use client"
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react';
+import AudioTranscript from './helper';
+
 
 export default function Home() {
   const [formData, setFormData] = useState<FormData | null>(null);
@@ -43,16 +45,20 @@ export default function Home() {
 
   const [transcriptionText, setTranscriptionText] = useState('');
 
-  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInputChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      const at = new AudioTranscript
+      await at.assembly_ai_transcribe(file)
       // Handle file upload here (e.g., using FileReader)
     }
   };
 
-  const handleLinkInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLinkInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const link = event.target.value;
     if (link) {
+      const at = new AudioTranscript
+      await at.assembly_ai_transcribe(link)
       // Handle link input here
     }
   };

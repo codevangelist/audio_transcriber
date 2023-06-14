@@ -18,7 +18,7 @@ class AudioTranscript {
         const transcriptUrl = `https://api.assemblyai.com/v2/transcript/${transcriptId}`;
         const transcriptParams = {
           headers: {
-            'authorization': process.env.ASSEMBLYAI_API_KEY ? process.env.ASSEMBLYAI_API_KEY : '',
+            'authorization': process.env.ASSEMBLYAI_API_KEY ??  '',
             'content-type': 'application/json',
           },
           method: 'GET',
@@ -39,7 +39,7 @@ class AudioTranscript {
               console.log(`Success: ${JSON.stringify(transcriptData)}`);
               console.log(`Text: ${transcriptData.text}`);
               isTranscribing = false;
-              break;
+              return transcriptData.text
             default:
               console.log(`Something went wrong :-( : ${transcriptData.status}`);
               isTranscribing = false;
@@ -52,12 +52,39 @@ class AudioTranscript {
     }
 
     async whisper_ai_transcribe(audioFile: any) {
-      
+      const data = new FormData();
+      data.append("file", audioFile);
+      data.append("model", "whisper-1");
+      data.append("language", "en");
+
+      if (audioFile.size > 25 * 1024 * 1024) {
+        alert("Please upload an audio file less than 25MB");
+        return;
+      }
+
+      const url = "https://api.openai.com/v1/audio/transcriptions"
+      const params = {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? ""}`,
+        },
+        method: "POST",
+        body: data,
+      }
+
+      try {
+        const txRes = await fetch(url,params)
+        const data = await txRes.json();
+        return data.text
+      } catch (error) {
+        return error
+      }
     }
 
     async deepgram_transcribe(audioFile: any) {
       
     }
+
+   
 }
 
 export default AudioTranscript
