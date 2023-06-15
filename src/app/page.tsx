@@ -8,41 +8,6 @@ export default function Home() {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [convertedText, setConvertedText] = useState<string>("");
   const [loading, setLoading] = useState(false);
-
-  const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-     
-      const data = new FormData();
-      data.append("file", file);
-      data.append("model", "whisper-1");
-      data.append("language", "en");
-      setFormData(data);
-
-      // check if the size is less than 25MB
-      if (file.size > 25 * 1024 * 1024) {
-        alert("Please upload an audio file less than 25MB");
-        return;
-      }
-    }
-  };
-  const sendAudio = async () => {
-    setLoading(true);
-    const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? ""}`,
-      },
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    setLoading(false);
-
-    setConvertedText(data.text);
-
-  };
-
   const [transcriptionText, setTranscriptionText] = useState('');
 
   const handleFileInputChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,14 +19,6 @@ export default function Home() {
     }
   };
 
-  const handleLinkInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const link = event.target.value;
-    if (link) {
-      const at = new AudioTranscript
-      await at.assembly_ai_transcribe(link)
-      // Handle link input here
-    }
-  };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -93,18 +50,6 @@ export default function Home() {
             type="file"
             accept="audio/*"
             onChange={handleFileInputChange}
-            className="py-2 px-4 mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="linkInput" className="block font-medium">
-            Add Link to Audio File
-          </label>
-          <input
-            id="linkInput"
-            type="text"
-            onChange={handleLinkInputChange}
             className="py-2 px-4 mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>

@@ -3,7 +3,7 @@ class AudioTranscript {
       const uploadUrl = 'https://api.assemblyai.com/v2/transcript';
       const uploadParams = {
         headers: {
-          'authorization': process.env.ASSEMBLYAI_API_KEY ? process.env.ASSEMBLYAI_API_KEY : '',
+          'authorization': process.env.NEXT_PUBLIC_ASSEMBLYAI_API_KEY ?? '',
           'content-type': 'application/json',
         },
         body: JSON.stringify({ 'audio_url': audioFile }),
@@ -18,7 +18,7 @@ class AudioTranscript {
         const transcriptUrl = `https://api.assemblyai.com/v2/transcript/${transcriptId}`;
         const transcriptParams = {
           headers: {
-            'authorization': process.env.ASSEMBLYAI_API_KEY ??  '',
+            'authorization': process.env.NEXT_PUBLIC_ASSEMBLYAI_API_KEY ??  '',
             'content-type': 'application/json',
           },
           method: 'GET',
