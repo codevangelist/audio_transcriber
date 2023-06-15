@@ -75,13 +75,13 @@ export default function Home() {
           className="py-2 px-4 mx-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
         >
-          Copy All
+          Copy
         </button>
         <button
           className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
         >
-          Share Text
+          Share
         </button>
         </div>
       </div>
