@@ -8,15 +8,19 @@ export default function Home() {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [convertedText, setConvertedText] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [af, setAf] = useState<File>();
   const [transcriptionText, setTranscriptionText] = useState('');
 
   const handleFileInputChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const at = new AudioTranscript
-      await at.assembly_ai_transcribe(file)
-      // Handle file upload here (e.g., using FileReader)
+      setAf(file);
     }
+  };
+
+  const tx = async() => {
+    const at = new AudioTranscript
+    af != undefined ? await at.deepgram_transcribe(af) : alert("please choose an audio file!");
   };
 
   return (
@@ -57,6 +61,7 @@ export default function Home() {
         <button
           className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
+          onClick={tx}
         >
           Start Transcription
         </button>
@@ -67,7 +72,7 @@ export default function Home() {
 
         <div className="mt-8">
           <h2 className="text-lg font-bold mb-4">Transcribed Text</h2>
-          <div className="bg-gray-100 p-4 rounded-md">{TextWriter({transcriptionText,10})}</div>
+          <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
         </div>
 
         <div className='mt-4'>
