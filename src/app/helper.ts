@@ -91,10 +91,8 @@ class AudioTranscript {
       });
 
       const res = await response.json()
-      return res.results.reduce((transcript: string, result: any) => {
-        console.log(`Transcript: ${transcript + result.alternatives[0].transcript}`)
-        return transcript + result.alternatives[0].transcript;
-      }, '');
+      console.log(`Res: ${JSON.stringify(res.results.channels[0].alternatives[0].transcript)}`)
+      return res.results.channels[0].alternatives[0].transcript
     }
 
     async default_transcribe(audioFile: File) : Promise<string> {
