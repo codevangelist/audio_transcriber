@@ -1,3 +1,5 @@
+import {Deepgram} from '@deepgram/sdk'
+import ffmpegStatic from 'ffmpeg-static'
 class AudioTranscript {
     async assembly_ai_transcribe(audioFile: any) {
       const uploadUrl = 'https://api.assemblyai.com/v2/transcript';
@@ -51,16 +53,22 @@ class AudioTranscript {
       }
     }
 
+    
+    async function ffmpeg(command) {
+      return new Promise((resolve, reject) => {
+        exec(`${ffmpegStatic} ${command}`, (err, stderr, stdout) => {
+          if (err) reject(err)
+          resolve(stdout)
+        })
+      })
+    }
+
     async whisper_ai_transcribe(audioFile: any) {
       const data = new FormData();
       data.append("file", audioFile);
       data.append("model", "whisper-1");
       data.append("language", "en");
 
-      if (audioFile.size > 25 * 1024 * 1024) {
-        alert("Please upload an audio file less than 25MB");
-        return;
-      }
 
       const url = "https://api.openai.com/v1/audio/transcriptions"
       const params = {
@@ -81,7 +89,53 @@ class AudioTranscript {
     }
 
     async deepgram_transcribe(audioFile: any) {
-      
+      const deepgram = new Deepgram(process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "")
+    }
+
+    async default_transcribe(audioFile: any) {
+      return new Promise((resolve, reject) => {
+        const recognizer = new webkitSpeechRecognition();
+        recognizer.onerror = (event) => {
+          reject(event.error);
+        };
+
+        recognizer.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          resolve(transcript);
+        };
+
+        recognizer.onend = () => {
+          reject(new Error('No speech detected.'));
+        };
+
+        recognizer.continuous = true;
+        recognizer.interimResults = true;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const audioData = reader.result as ArrayBuffer;
+          const audioContext = new AudioContext();
+          audioContext.decodeAudioData(audioData).then((audioBuffer) => {
+            recognizer.start();
+            recognizer.onend = () => recognizer.stop();
+            recognizer.addEventListener('end', recognizer.stop);
+            recognizer.addEventListener('audiostart', () => console.log('Audio started'));
+            recognizer.addEventListener('audioend', () => console.log('Audio ended'));
+            recognizer.addEventListener('error', (event) => console.error(event.error));
+            recognizer.addEventListener('result', (event) => {
+              const transcript = event.results[0][0].transcript;
+              console.log('Transcript:', transcript);
+            });
+            recognizer.postMessage({ command: 'process', buffer: audioBuffer });
+          });
+        }
+
+        reader.onerror = (error) => {
+          reject(error);
+        };
+
+        reader.readAsArrayBuffer(audioFile);
+      }
     }
 
    

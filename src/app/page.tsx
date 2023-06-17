@@ -67,7 +67,7 @@ export default function Home() {
 
         <div className="mt-8">
           <h2 className="text-lg font-bold mb-4">Transcribed Text</h2>
-          <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
+          <div className="bg-gray-100 p-4 rounded-md">{TextWriter({transcriptionText,10})}</div>
         </div>
 
         <div className='mt-4'>
