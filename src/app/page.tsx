@@ -9,7 +9,9 @@ export default function Home() {
   const [convertedText, setConvertedText] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [af, setAf] = useState<File>();
-  const [transcriptionText, setTranscriptionText] = useState('');
+  const [displayText, setDisplayText] = useState("");
+  const [index, setIndex] = useState(0);
+  const [transcriptionText, setTranscriptionText] = useState<TextWriterProps>();
 
   const handleFileInputChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -19,10 +21,16 @@ export default function Home() {
   };
 
   const tx = async() => {
+    setLoading(true)
     const at = new AudioTranscript
     af != undefined ? await at.deepgram_transcribe(af) : alert("please choose an audio file!");
+    const txt = await at.deepgram_transcribe(af);
+    setLoading(false)
+    return setTranscriptionText({
+      text: txt,
+      delay: 10,
+    })
   };
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -61,18 +69,14 @@ export default function Home() {
         <button
           className="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           // Add onClick handler for transcription start
-          onClick={tx}
+          onClick={loading ? ()=>{} : tx }
         >
-          Start Transcription
+          {loading ? `Please wait...`: `Start Transcription`}
         </button>
-
-        <div>
-          <TextWriter text={convertedText} delay={10} />
-        </div>
 
         <div className="mt-8">
           <h2 className="text-lg font-bold mb-4">Transcribed Text</h2>
-          <div className="bg-gray-100 p-4 rounded-md">{transcriptionText}</div>
+        <div className="bg-gray-100 p-4 rounded-md text-black h-60">{transcriptionText ? transcriptionText.text : `Choose an audio file and click the Start Transcription button` }</div>
         </div>
 
         <div className='mt-4'>
@@ -94,25 +98,3 @@ export default function Home() {
   )
 };
 
-const TextWriter = ({ text, delay }: TextWriterProps) => {
-  const [displayText, setDisplayText] = useState("");
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const currentChar = text.charAt(index);
-      const nextChar = text.charAt(index + 1);
-      setDisplayText((prevDisplayText) => {
-        if (currentChar === "." && nextChar !== " ") {
-          return prevDisplayText + currentChar + " ";
-        }
-        return prevDisplayText + currentChar;
-      });
-      setIndex((prevIndex) => prevIndex + 1);
-    }, delay);
-
-    return () => clearInterval(timer);
-  }, [text, delay, index]);
-
-  return <div>{displayText}</div>;
-};
